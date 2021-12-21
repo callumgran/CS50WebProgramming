@@ -36,16 +36,15 @@ def get_entry(title):
     except FileNotFoundError:
         return None
 
-
-def check_entry_name(search):
+def format_entry_name(name):
     """
-    Checks if the entry that is searched exists in the entries that are saved.
-    Returns entry if exists, returns null if it doesn't exist.
+    Returns a correctly formatted version of search query so that it matches
+    the entry it references. If no such entry exists, the function returns None.
     """
     entries = list_entries()
     try:
         for entry in entries:
-            if entry.lower() == search.lower():
-                return get_entry(entry)
+            if entry.upper() == name.upper():
+                return entry
     except:
         return None
