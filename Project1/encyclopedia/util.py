@@ -35,3 +35,17 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def check_entry_name(search):
+    """
+    Checks if the entry that is searched exists in the entries that are saved.
+    Returns entry if exists, returns null if it doesn't exist.
+    """
+    entries = list_entries()
+    try:
+        for entry in entries:
+            if entry.lower() == search.lower():
+                return get_entry(entry)
+    except:
+        return None
