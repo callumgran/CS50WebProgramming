@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -18,14 +19,6 @@ def entry(request, name):
         return render(request, "encyclopedia/error.html", {
             "message": "The page for {name} does not exist yet.".format(name=name)
         })
-    
-    entries = util.list_entries
-    try:
-        for entry in entries:
-            if entry.upper() == name.upper():
-                name = util.get_entry(entry)
-    except:
-        name = None
     markdown = Markdown()
     return render(request, "encyclopedia/entry.html", {
         "name": name,
@@ -96,7 +89,11 @@ def search(request):
             for entry in entries:
                 if query.upper() in entry.upper():
                     matches.append(entry)
-            
-            return render(request, "encyclopedia/search.html", {
-                "entries" : matches
-            })
+            if len(matches) == 0:
+                return render(request, "encyclopedia/error.html", {
+                    "message" : "There were no results for {search}".format(search=search)
+                })
+            else:
+                return render(request, "encyclopedia/search.html", {
+                    "entries" : matches
+                })
